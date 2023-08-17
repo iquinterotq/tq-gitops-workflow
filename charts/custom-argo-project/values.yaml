@@ -1,0 +1,7 @@
+---
+argo-project:
+  argo:
+    baseApplication:
+      repoURL: https://mikroways.github.io/argo-gitops-flow/
+      targetRevision: 1.0.1
+      chart: argo-base-app

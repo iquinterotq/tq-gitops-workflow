@@ -1,0 +1,47 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: tq
+spec:
+  generators:
+  - git:
+      files:
+      - path: projects/**/values.yaml
+      repoURL: https://github.com/Mikroways/tq-gitops-workflow.git
+      revision: main
+  template:
+    metadata:
+      name: '{{path[1]}}-{{path[2]}}-{{path[3]}}-{{path[4]}}'
+    spec:
+      destination:
+        namespace: default
+        server: https://kubernetes.default.svc
+      project: default
+      source:
+        helm:
+          valueFiles:
+          - secrets+age-import-kubernetes://argocd/argocd-secret#tqcorp-age-private-key.txt?{{path}}/values.yaml
+          values: |
+            argo-project:
+              namespace: '{{path[1]}}-{{path[2]}}-{{path[4]}}'
+              cluster:
+                name: '{{ path[3] }}'
+                nameSuffix: 'cluster'
+              argo:
+                namespace: argocd
+                baseApplication:
+                  syncPolicy:
+                    automated:
+                      prune: false
+                      selfHeal: true
+                  helm:
+                    parameters:
+                      - name: namespace
+                        value: '{{path[1]}}-{{path[2]}}-{{path[4]}}'
+        path: charts/custom-argo-project
+        repoURL: https://github.com/Mikroways/tq-gitops-workflow.git
+        targetRevision: main
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true

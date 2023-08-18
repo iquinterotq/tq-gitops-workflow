@@ -7,7 +7,7 @@ spec:
   - git:
       files:
       - path: projects/**/values.yaml
-      repoURL: https://github.com/Mikroways/tq-gitops-workflow.git
+      repoURL: https://github.com/iquinterotq/tq-gitops-workflow.git
       revision: main
   template:
     metadata:
@@ -39,7 +39,7 @@ spec:
                       - name: namespace
                         value: '{{path[1]}}-{{path[2]}}-{{path[4]}}'
         path: charts/custom-argo-project
-        repoURL: https://github.com/Mikroways/tq-gitops-workflow.git
+        repoURL: https://github.com/iquinterotq/tq-gitops-workflow.git
         targetRevision: main
       syncPolicy:
         automated:
